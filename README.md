@@ -6,4 +6,4 @@
 - [ ] requirement.txt
 - [ ] execution instruction
 
-Coming soon.
+Code will be available soon after my military service(which ends around 6/1 I hope), sorry guys!
