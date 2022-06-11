@@ -1,11 +1,12 @@
 
 # Associated_Learning
 
-# AL
-
 AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_works/wu22-associated.pdf) and [NECO 2021](https://github.com/SamYWK/Associated_Learning)) decomposes a neural network's layers into small components such that **each component has a local objective function**.  As a result, **each layer can be trained independently and simultaneously** (in a pipeline fashion).  AL's predictive power is comparable to (and frequently better than) end-to-end backpropagation.
 
 ## Requirements
+
+*Using virtual environment is recommended.* <br>
+*During the experiment, we mostly run our code on RTX3090*
 
 ```bash
 pip install -r requirements.txt
@@ -15,7 +16,7 @@ pip install -r requirements.txt
 
 * For AGNews and DBpedia, dataset will be automatically downloaded during the training.
 * For SST-2, please download the dataset from [GLUE Benchmark](https://gluebenchmark.com/tasks) and put the files into `./data/sst2/`.
-
+* To evaluate the performance of SST-2, a 
 ## Execution
 
 We use json file for the configuration. Before running the code, please check [`hyperparameters.json`](configs/) and select proper parameters.
