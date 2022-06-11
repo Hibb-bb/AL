@@ -5,8 +5,8 @@ import torch
 import torch.nn as nn
 import wandb
 
-from .mi_tool import MI_Vis
-from .vis import tsne
+# from .mi_tool import MI_Vis
+# from .vis import tsne
 
 
 class TransfomerTrainer:
