@@ -1,6 +1,8 @@
 
 # Associated_Learning
 
+This is the code of the paper: *"Associated Learning: a Methodology to Decompose End-to-End Backpropagation on CNN, RNN, and Transformer"*.
+
 AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_works/wu22-associated.pdf) and [NECO 2021](https://github.com/SamYWK/Associated_Learning)) decomposes a neural network's layers into small components such that **each component has a local objective function**.  As a result, **each layer can be trained independently and simultaneously** (in a pipeline fashion).  AL's predictive power is comparable to (and frequently better than) end-to-end backpropagation.
 
 ## Requirements
