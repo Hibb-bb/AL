@@ -18,7 +18,7 @@ pip install -r requirements.txt
 
 * For AGNews and DBpedia, dataset will be automatically downloaded during the training.
 * For SST-2, please download the dataset from [GLUE Benchmark](https://gluebenchmark.com/tasks) and put the files into `./data/sst2/`.
-* For IMDB, please download the dataset from [Here](https://drive.google.com/file/d/15bZOVHo6KESFl-WKnElEjcM_qZkjip21/view?usp=sharing), and put unzip the file into `data/`(should be like `data/imdb/`), we use the standard train-test split of IMDB dataset.
+* For IMDB, please download the dataset from [Here](https://drive.google.com/file/d/15bZOVHo6KESFl-WKnElEjcM_qZkjip21/view?usp=sharing), and unzip the file into `data/`(should be like `data/imdb/`), we use the standard train-test split of IMDB dataset.
 * To evaluate the performance of SST-2, a prediction file [`data/sst2/SST-2.tsv`](data/sst2/) will be generated, please submit it along with the GLUE submission format.
 
 ## Execution
