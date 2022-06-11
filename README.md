@@ -22,9 +22,9 @@ We use json file for the configuration. Before running the code, please check [`
 
 Options for hyperparameters:
 
-    * Datasets(training dataset): "AGNews", "DBpedia", "IMDb", "SST".
-    * Mode(model structure and propagation method): 'LSTMAL', 'LSTM', 'Transformer', 'TransformerAL'
-    * activation(activation used in AL bridge function): please see '''utils.py''' - '''get_act()'''.
+   * Datasets(training dataset): AGNews, DBpedia, IMDB, SST.
+   * Mode(model structure and propagation method): LSTMAL, LSTM, Transformer, TransformerAL
+   * activation(activation used in AL bridge function): please see utils.py - get_act()
 
 Then just simply run:
 
