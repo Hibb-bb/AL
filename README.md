@@ -16,7 +16,8 @@ pip install -r requirements.txt
 
 * For AGNews and DBpedia, dataset will be automatically downloaded during the training.
 * For SST-2, please download the dataset from [GLUE Benchmark](https://gluebenchmark.com/tasks) and put the files into `./data/sst2/`.
-* To evaluate the performance of SST-2, a 
+* To evaluate the performance of SST-2, a prediction file [`data/sst2/SST-2.tsv`](data/sst2/) will be generated, please submit it along with the GLUE submission format.
+
 ## Execution
 
 We use json file for the configuration. Before running the code, please check [`hyperparameters.json`](configs/) and select proper parameters.
