@@ -8,7 +8,7 @@ AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_work
 ## Requirements
 
 *Using virtual environment is recommended.* <br>
-*During the experiment, we mostly run our code on RTX3090*
+*During the experiment, we mostly ran our code on RTX3090*
 
 ```bash
 pip install -r requirements.txt
