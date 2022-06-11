@@ -35,10 +35,10 @@ python -m associated_learning.main
 ## Citation
 
     @inproceedings{
-    wu2022associated,
-    title={Associated Learning: an Alternative to End-to-End Backpropagation that Works on {CNN}, {RNN}, and Transformer},
-    author={Dennis Y.H. Wu and Dinan Lin and Vincent Chen and Hung-Hsuan Chen},
-    booktitle={International Conference on Learning Representations},
-    year={2022},
-    url={https://openreview.net/forum?id=4N-17dske79}
+      wu2022associated,
+      title={Associated Learning: an Alternative to End-to-End Backpropagation that Works on {CNN}, {RNN}, and Transformer},
+      author={Dennis Y.H. Wu and Dinan Lin and Vincent Chen and Hung-Hsuan Chen},
+      booktitle={International Conference on Learning Representations},
+      year={2022},
+      url={https://openreview.net/forum?id=4N-17dske79}
     }
