@@ -1,5 +1,5 @@
 
-# Associated_Learning
+# Associated Learning
 
 This repo contains the Pytorch code used to train the models used in the paper- **Associated Learning: a Methodology to Decompose End-to-End Backpropagation on CNN, RNN, and Transformer**, presented at ICLR 2022.
 
