@@ -29,7 +29,7 @@ CONFIG = {
         'max_len': 256,
         'one_hot_label': True,
         'activation': 'tanh',
-        'lr': 1e-3,
+        'lr': 1e-4,
         'batch_size': 256,
         'epochs': 50,
         'ramdom_label': False

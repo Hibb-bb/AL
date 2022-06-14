@@ -22,6 +22,7 @@ conllu @ file:///tmp/build/80754af9/conllu_1633105480005/work
 cryptography @ file:///C:/ci/cryptography_1616769344312/work
 cycler==0.10.0
 Cython==0.29.21
+datasets==2.2.2
 datasets @ file:///tmp/build/80754af9/datasets_1633106387566/work
 decorator @ file:///tmp/build/80754af9/decorator_1621259047763/work
 dill @ file:///tmp/build/80754af9/dill_1623919422540/work
