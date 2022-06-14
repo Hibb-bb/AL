@@ -5,7 +5,7 @@
 * `Mode`: (str) `"LSTM" || "LSTMAL" || "Transformer" || "TransformerAL"`
 * `Parameters`:
 
-        "activation": "tanh" || "sigmoid" (more option in utils.py--get_act()),
+        "activation": "tanh" || "sigmoid" (more options in utils.py--get_act()),
         "batch_size": 256,
         "class_num": 4 (agnews) || 14 (dbpedia) || 2 (sst) || 2 (IMDB),
         "embedding_dim": 300,
