@@ -1,14 +1,15 @@
 
-# Associated_Learning
+# Associated Learning
 
-This repo contains the Pytorch code used to train the models used in the paper- **Associated Learning: a Methodology to Decompose End-to-End Backpropagation on CNN, RNN, and Transformer**, presented at ICLR 2022.
+This repo contains the Pytorch code used to train the models used in the paper:<br>
+**Associated Learning: a Methodology to Decompose End-to-End Backpropagation on CNN, RNN, and Transformer**, presented at ICLR 2022.
 
 AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_works/wu22-associated.pdf) and [NECO 2021](https://github.com/SamYWK/Associated_Learning)) decomposes a neural network's layers into small components such that **each component has a local objective function**.  As a result, **each layer can be trained independently and simultaneously** (in a pipeline fashion).  AL's predictive power is comparable to (and frequently better than) end-to-end backpropagation.
 
 ## Requirements
 
 *Using virtual environment is recommended.* <br>
-*During the experiment, we mostly run our code on RTX3090*
+*During the experiment, we mostly ran our code on RTX3090, but 1070 should be enough.*
 
 ```bash
 pip install -r requirements.txt
