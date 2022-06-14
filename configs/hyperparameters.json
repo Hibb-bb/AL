@@ -9,7 +9,7 @@
       "epochs": 10,
       "hidden_dim": 512,
       "label_dim": 4,
-      "lr": 0.001,
+      "lr": 0.0001,
       "max_len": 128,
       "nhead": 6,
       "nlayers": 2,
