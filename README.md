@@ -11,6 +11,14 @@ AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_work
 *Using virtual environment is recommended.* <br>
 *During the experiment, we mostly ran our code on RTX3090, but 1070 should be enough.*
 
+If you use Miniconda3 (version 4.7.12) on Ubuntu, install the package by
+
+```bash
+pip install -r miniconda3-4.7.12-requirements.txt
+```
+
+For Windows environments, you could try
+
 ```bash
 pip install -r requirements.txt
 ```
