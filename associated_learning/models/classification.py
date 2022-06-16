@@ -57,7 +57,8 @@ class LSTMALForCLS(nn.Module):
         
         batch_size = x.size(0)
         direction = 2
-
+        
+        y = y.long()
         emb_x, emb_y, = self.embedding(x, y)
 
         emb_x, emb_y = self.dropout(emb_x), self.dropout(emb_y)

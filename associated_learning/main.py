@@ -9,11 +9,14 @@ from .models import LSTMForCLS, LSTMALForCLS, TransformerForCLS, TransformerALFo
 from .trainers import ALTrainer, Trainer, TransfomerTrainer
 from .utils import count_parameters, get_act, get_word_vector
 
+import sys
+import json
 # Mode: (str) 'LSTM' | 'LSTMAL' | 'Transformer' | 'TransformerAL'
 # Dataset: (str) 'AGNews' | 'DBpedia' | 'IMDb' | 'SST'
 # Parameters:
 #   `pretrained`: (str) 'fasttext' | 'glove' | None
 #   `activation`: (str)
+'''
 CONFIG = {
     'Title': 'Template',
     'Mode': 'template',
@@ -36,14 +39,18 @@ CONFIG = {
     },
     "Save_dir": 'ckpt/',
 }
+'''
 
+# config_file = sys.argv[2]
+# with open(config_file, 'r') as j:
+#     CONFIG=json.loads(j.read())
 
 def arg_parser():
 
     t = CONFIG['Title']
     m = CONFIG['Mode']
     parser = argparse.ArgumentParser(f'{t} for {m} training.')
-
+    
     # model params
     parser.add_argument(
         '--vocab-size', type=int,
@@ -112,6 +119,11 @@ def arg_parser():
         default=f'{dir}{t.lower()}_transformer.pt'
     )
 
+    parser.add_argument(
+        '--config-file', type=str,
+        default = 'configs/hyperparameters.json'
+    )
+
     return parser.parse_args()
 
 
@@ -120,6 +132,7 @@ def train(args):
     torch.cuda.empty_cache()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+    print('preparing dataest...')
     if CONFIG['Dataset'] == 'AGNews':
         data = AGNews()
     elif CONFIG['Dataset'] == 'DBpedia':
@@ -129,18 +142,23 @@ def train(args):
     elif CONFIG['Dataset'] == 'SST':
         data = SST2()
 
-    if CONFIG['mode'] == 'LSTM' or CONFIG['mode'] == 'LSTMAL':
+    if CONFIG['Mode'] == 'LSTM' or CONFIG['Mode'] == 'LSTMAL':
         train_loader, valid_loader, test_loader, vocab = data.load(args)
-    elif CONFIG['mode'] == 'Transformer' or CONFIG['mode'] == 'TransformerAL':
+    elif CONFIG['Mode'] == 'Transformer' or CONFIG['Mode'] == 'TransformerAL':
         train_loader, valid_loader, test_loader, vocab = data.load_with_masks(
             args)
+
+    print(CONFIG)
 
     if args.pretrained:
         w = get_word_vector(vocab, emb=args.pretrained)
     else:
         w = None
-
-    if CONFIG['mode'] == 'LSTM':
+    
+    args.word_emb = args.emb_dim
+    args.label_emb = args.l1_dim = args.l2_dim = args.bridge_dim = 128
+    print('preparing trainer...')
+    if CONFIG['Mode'] == 'LSTM':
 
         model = LSTMForCLS(
             args.vocab_size, args.emb_dim, args.hid_dim,
@@ -155,7 +173,7 @@ def train(args):
             save_dir=args.save_dir
         )
 
-    elif CONFIG['mode'] == 'LSTMAL':
+    elif CONFIG['Mode'] == 'LSTMAL':
 
         act = get_act(args)
         emb = EmbeddingAL(
@@ -183,7 +201,7 @@ def train(args):
             save_dir=args.save_dir
         )
 
-    elif CONFIG['mode'] == 'Transformer':
+    elif CONFIG['Mode'] == 'Transformer':
 
         model = TransformerForCLS(
             args.vocab_size, args.emb_dim, args.hid_dim,
@@ -198,7 +216,7 @@ def train(args):
             save_dir=args.save_dir, is_al=False
         )
 
-    elif CONFIG['mode'] == 'TransformerAL':
+    elif CONFIG['Mode'] == 'TransformerAL':
 
         act = get_act(args)
         emb = EmbeddingAL(
@@ -236,11 +254,15 @@ def train(args):
     else:
         trainer.eval()
 
-    if CONFIG['mode'] == 'Transformer' or CONFIG['mode'] == 'TransformerAL':
+    if CONFIG['Mode'] == 'Transformer' or CONFIG['Mode'] == 'TransformerAL':
         trainer.short_cut_emb()
         trainer.short_cut_l1()
 
 
 if __name__ == '__main__':
+
+    config_file = sys.argv[2]
+    with open(config_file, 'r') as j:
+        CONFIG=json.loads(j.read())
     args = arg_parser()
     train(args)

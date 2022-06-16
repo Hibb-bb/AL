@@ -10,8 +10,11 @@ import torch
 import torch.nn as nn
 from nltk.corpus import stopwords
 from prettytable import PrettyTable
-from torchnlp.word_to_vector import FastText, GloVe
+import io
+from tqdm import tqdm
 
+import nltk
+nltk.download('stopwords')
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 250):
@@ -78,25 +81,49 @@ def get_act(args):
         act = None
     return act
 
-
 def get_word_vector(vocab, emb='glove'):
-    # vocab is a dictionary {word: word_id}
+
+    if emb == 'glove':
+        fname = 'associated_learning/glove.6B.300d.txt'
+        
+        with open(fname,'rt') as fi:
+            full_content = fi.read().strip().split('\n')
+
+        data = {}
+        for i in tqdm(range(len(full_content)), total=len(full_content), desc = 'loading glove vocabs...'):
+            i_word = full_content[i].split(' ')[0]
+            if i_word not in vocab.keys():
+                continue
+            i_embeddings = [float(val) for val in full_content[i].split(' ')[1:]]
+            data[i_word] = i_embeddings
+
+    elif emb == 'fasttext':
+        fname = 'associated_learning/wiki-news-300d-1M.vec'
+
+        fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+        n, d = map(int, fin.readline().split())
+        data = {}
+
+        for line in tqdm(fin, total=1000000, desc='loading fasttext vocabs...'):
+            tokens = line.rstrip().split(' ')
+            if tokens[0] not in vocab.keys():
+                continue
+            data[tokens[0]] = np.array(tokens[1:], dtype=np.float32)
+    
+    else:
+        raise Exception('emb not implemented')
+
     w = []
     find = 0
-    if emb == 'glove':
-        vector = GloVe(name='6B')
-    elif emb == 'FastText' or emb == 'fasttext':
-        vector = FastText()
-
     for word in vocab.keys():
         try:
-            w.append(vector[word])
+            w.append(torch.tensor(data[word]))
             find += 1
         except:
             w.append(torch.rand(300))
+
     print('found', find, 'words in', emb)
     return torch.stack(w, dim=0)
-
 
 def data_preprocessing(text, remove_stopword=False):
 

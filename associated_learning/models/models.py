@@ -84,7 +84,7 @@ class EmbeddingAL(ALComponent):
         self,
         num_embeddings: Tuple[int, int],
         embedding_dim: Tuple[int, int],
-        pretrained: int = None,
+        pretrained= None,
         padding_idx: int = 0,
         lin: bool = False,
         act: nn.Module = None,
@@ -93,7 +93,7 @@ class EmbeddingAL(ALComponent):
         if act == None:
             act = nn.ELU()
 
-        if pretrained:
+        if pretrained is not None:
             f = nn.Embedding.from_pretrained(
                 pretrained, padding_idx=padding_idx, freeze=False
             )
@@ -117,7 +117,7 @@ class EmbeddingAL(ALComponent):
         )
         # loss function
         cb = nn.MSELoss()
-        ca = nn.MSELoss()
+        ca = nn.CrossEntropyLoss()
 
         super(EmbeddingAL, self).__init__(f, g, bx, dy, cb, ca)
 
@@ -129,21 +129,31 @@ class EmbeddingAL(ALComponent):
         p_nonzero = (p != 0.).sum(dim=1)
         p = p.sum(dim=1) / p_nonzero
 
-        if not self.reverse:
-            loss_b = self.criterion_br(self.bx(p), q)
-            if self.output_dim == 1:
-                loss_d = self.criterion_ae(
-                    self._t_prime.squeeze(1), self.y.to(torch.float))
-            else:
-                loss_d = self.criterion_ae(
-                    self._t_prime, self.y.to(torch.float))
-        else:
-            raise Exception()
+        loss_b = self.criterion_br(self.bx(p), q)
+        loss_d = self.criterion_ae(
+            self._t_prime, self.y.argmax(dim=-1))
 
         self.loss_b = loss_b.item()
         self.loss_d = loss_d.item()
 
         return loss_b + loss_d
+
+    def forward(self, x, y):
+
+        self.x = x
+        self.y = y
+
+        if self.training:
+
+            self._s = self.f(x)
+            self._t = self.g(y.argmax(dim=-1))
+            self._t_prime = self.dy(self._t)
+            return self._s.detach(), self._t.detach()
+
+        else:
+
+            self._s = self.f(x)
+            return self._s.detach(), self._t_prime.detach()
 
 
 class LinearAL(ALComponent):

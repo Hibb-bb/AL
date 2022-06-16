@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-import wandb
 
+# import wandb
 # from .mi_tool import MI_Vis
 # from .vis import tsne
 
@@ -17,9 +17,9 @@ class TransfomerTrainer:
 
         self.model = model
         project_name = save_dir.replace('/', '-')
-        wandb.login(key='token id')
-        wandb.init(project=project_name, entity='team')
-        wandb.watch(self.model)
+        # wandb.login(key='token id')
+        # wandb.init(project=project_name, entity='team')
+        # wandb.watch(self.model)
 
         self.opt = torch.optim.Adam(self.model.parameters(), lr=lr)
         # self.opt = torch.optim.SGD(self.model.parameters(), lr=0.1, momentum=0.9)
@@ -262,7 +262,7 @@ class TransfomerTrainer:
             for k in list(losses.keys()):
                 losses[k] = np.mean(losses[k])
 
-            wandb.log(losses)
+            # wandb.log(losses)
 
             print(f'Epoch {e+1}')
             if self.is_al:
@@ -503,14 +503,14 @@ class ALTrainer:
         self, model, lr, train_loader, valid_loader, test_loader, save_dir, label_num=None, double=False, class_num=None
     ):
 
-        self.mi = MI_Vis()
+        # self.mi = MI_Vis()
         self.sample = []
 
         self.model = model
         project_name = save_dir.replace('/', '-')
-        wandb.init(project=project_name, entity='al-train')
-        config = wandb.config
-        wandb.watch(self.model)
+        # wandb.init(project=project_name, entity='al-train')
+        # config = wandb.config
+        # wandb.watch(self.model)
 
         self.opt = torch.optim.Adam(self.model.parameters(), lr=lr)
         # self.opt = torch.optim.SGD(self.model.parameters(), lr=0.1, momentum=0.9)
@@ -565,18 +565,18 @@ class ALTrainer:
 
                 emb_loss, l1_loss, l2_loss = self.model(inputs, labels)
 
-                wandb.log({"emb loss": emb_loss.item()})
-                wandb.log({"lstm1 loss": l1_loss.item()})
-                wandb.log({"lstm2 loss": l2_loss.item()})
-                wandb.log({"emb bridge loss": self.model.embedding.loss_b})
-                wandb.log({"emb decode loss": self.model.embedding.loss_d})
-                wandb.log({"lstm1 bridge loss": self.model.layer_1.loss_b})
-                wandb.log({"lstm1 decode loss": self.model.layer_1.loss_d})
-                wandb.log({"lstm2 bridge loss": self.model.layer_2.loss_b})
-                wandb.log({"lstm2 decode loss": self.model.layer_2.loss_d})
+                # wandb.log({"emb loss": emb_loss.item()})
+                # wandb.log({"lstm1 loss": l1_loss.item()})
+                # wandb.log({"lstm2 loss": l2_loss.item()})
+                # wandb.log({"emb bridge loss": self.model.embedding.loss_b})
+                # wandb.log({"emb decode loss": self.model.embedding.loss_d})
+                # wandb.log({"lstm1 bridge loss": self.model.layer_1.loss_b})
+                # wandb.log({"lstm1 decode loss": self.model.layer_1.loss_d})
+                # wandb.log({"lstm2 bridge loss": self.model.layer_2.loss_b})
+                # wandb.log({"lstm2 decode loss": self.model.layer_2.loss_d})
 
                 loss = emb_loss + l1_loss + l2_loss
-                wandb.log({"total loss": loss.item()})
+                # wandb.log({"total loss": loss.item()})
                 loss.backward()
 
                 nn.utils.clip_grad_norm_(
@@ -689,8 +689,8 @@ class ALTrainer:
                 f'train_loss : emb loss {epoch_train_loss[0]}, layer1 loss {epoch_train_loss[1]}, layer2 loss {epoch_train_loss[2]}')
             print(
                 f'train_accuracy : {epoch_train_acc*100} val_accuracy : {epoch_val_acc*100}')
-            wandb.log({"train acc": epoch_train_acc})
-            wandb.log({"valid acc": epoch_val_acc})
+            # wandb.log({"train acc": epoch_train_acc})
+            # wandb.log({"valid acc": epoch_val_acc})
 
             if epoch_val_acc >= self.valid_acc_min:
                 self.pat = 0
@@ -752,7 +752,7 @@ class ALTrainer:
 
                 test_count += labels.size(0)
         x = test_acc/test_count
-        wandb.log({"test acc": x})
+        # wandb.log({"test acc": x})
         print('Test acc', test_acc/test_count)
         # self.tsne_()
 
@@ -874,9 +874,9 @@ class Trainer:
         self.model = model
 
         project_name = save_dir.replace('/', '-normal-')
-        wandb.init(project=project_name, entity='al-train')
-        config = wandb.config
-        wandb.watch(self.model)
+        # wandb.init(project=project_name, entity='al-train')
+        # config = wandb.config
+        # wandb.watch(self.model)
         # self.opt = torch.optim.SGD(self.model.parameters(), lr=0.01, momentum=0.9)
         self.opt = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.label_num = label_num
@@ -963,8 +963,8 @@ class Trainer:
             print(
                 f'train_accuracy : {epoch_train_acc*100} val_accuracy : {epoch_val_acc*100}')
 
-            wandb.log({"train acc": epoch_train_acc*100})
-            wandb.log({"valid acc": epoch_val_acc*100})
+            # wandb.log({"train acc": epoch_train_acc*100})
+            # wandb.log({"valid acc": epoch_val_acc*100})
             if epoch_val_acc >= self.valid_acc_min:
                 self.pat = 0
                 self.ckpt_epoch = epoch+1
