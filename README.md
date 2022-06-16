@@ -29,6 +29,7 @@ pip install -r requirements.txt
 * We uses pretrained embeddings in our experiments, please download GloVe, Fasttext with the following commands. 
 
 ```bash
+cd associated_learning
 wget https://nlp.stanford.edu/data/glove.6B.zip
 wget https://dl.fbaipublicfiles.com/fasttext/vectors-english/wiki-news-300d-1M.vec.zip
 unzip glove.6B.zip
