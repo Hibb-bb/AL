@@ -1,4 +1,4 @@
-associated_learning/__pycache__/
+__pycache__/
 associated_learning/glove.6B.100d.txt
 associated_learning/glove.6B.200d.txt
 associated_learning/glove.6B.300d.txt
@@ -8,3 +8,4 @@ associated_learning/wiki-news-300d-1M.vec
 associated_learning/wiki-news-300d-1M.vec.zip
 *.pt
 *.zip
+.python-version
