@@ -23,6 +23,7 @@ dataclasses==0.8
 datasets==1.15.1
 decorator==5.1.0
 dill==0.3.4
+datasets=2.2.2
 docker-pycreds==0.4.0
 docopt==0.6.2
 entrypoints==0.3
