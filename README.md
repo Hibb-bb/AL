@@ -1,6 +1,6 @@
 
 # Associated Learning
- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <br>
 This repo contains the Pytorch code used to train the models used in the paper:<br>
 **Associated Learning: a Methodology to Decompose End-to-End Backpropagation on CNN, RNN, and Transformer**, presented at ICLR 2022.
 
