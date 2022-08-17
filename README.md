@@ -35,15 +35,8 @@ unzip glove.6B.zip
 unzip wiki-news-300d-1M.vec.zip
 ```
 
-## Execution
-```bash
-python3 train.py --dataset <DATASET>
-```
-
 ## Execution for Distributed training setup
- I think that pytorch has some bug when using a single optimizer for two seperated gradient path (the computation result can be incorrect)
- <br>
- So in order to ensure a more stable training results please run <br>
+ I think that pytorch has some bug when using a single optimizer for two seperated gradient path (the computation result can be incorrect), so I suggest running with the following commands <br> In order to ensure a more stable training results, please run <br>
  ```bash
  python3 dis_train.py --dataset <DATASET>
  ``` 
@@ -51,7 +44,7 @@ python3 train.py --dataset <DATASET>
  ```bash
 python3 dis_train_tr.py --dataset <DATASET>
  ```
-
+(IMDB is under construction)
 To run IMDB, please run
 ```bash
 python3 imdb_al.py
