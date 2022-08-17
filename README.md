@@ -12,7 +12,8 @@ AL (Associated Learning, [ICLR 2022](https://in.ncu.edu.tw/~hhchen/academic_work
 * For SST-2, please download the dataset from [GLUE Benchmark](https://gluebenchmark.com/tasks) and put the files into `./data/sst2/`.
 * For IMDB, please download the dataset from [Here](https://drive.google.com/file/d/1GRyOQs6TT0IXKDyha6zNjinmvREKyeuV/view?usp=sharing)
 * To evaluate the performance of SST-2, a prediction file [`data/sst2/SST-2.tsv`](data/sst2/) will be generated, please submit it along with the GLUE submission format.
-
+* Actually, we includes more datasets in this repo, including: `'ag_news', 'dbpedia_14', 'banking77', 'emotion', 'rotten_tomatoes','imdb', 'clinc_oos', 'yelp_review_full', 'sst2'`
+* For banking77, please indicate a longer training epoch like 300.
 ## Word Embeddings
 
 * We uses pretrained embeddings in our experiments, please download GloVe, Fasttext with the following commands. 
