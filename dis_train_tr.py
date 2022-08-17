@@ -110,6 +110,10 @@ def get_data(args):
 
     return train_loader, test_loader, class_num, vocab
 
+
+def sci_not(num):
+    return format(num,'.1E')
+
 def train(model, ld, epoch):
 
     model.train()
@@ -126,8 +130,7 @@ def train(model, ld, epoch):
         
         emb_ae, emb_as, l1_ae, l1_as, l2_ae, l2_as = round(tot_loss[0]/(step+1), 4), round(tot_loss[1]/(step+1), 4), round(tot_loss[2]/(step+1), 4), round(tot_loss[3]/(step+1), 4), round(tot_loss[4]/(step+1), 4), round(tot_loss[5]/(step+1), 4),
 
-        b.set_description(f'Acc {100*cor/num} ({cor}/{num}) | EMB {emb_ae} + {emb_as} | L1 {l1_ae} + {l1_as} | L2 {l2_ae} + {l2_as}')
-    # print('Train Epoch', epoch, 'Acc', 100*cor/num, 'Loss', tot_loss/len(ld))
+        b.set_description(f'Train {epoch} | Acc {100*cor/num} ({cor}/{num}) | EMB {emb_ae} + {emb_as} | L1 {l1_ae} + {l1_as} | L2 {l2_ae} + {l2_as}')
 
 def predicting_for_sst(args, model, vocab):
 
