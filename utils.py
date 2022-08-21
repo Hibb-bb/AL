@@ -16,22 +16,24 @@ def get_word_vector(vocab, emb='glove'):
 
     if emb == 'glove':
         fname = 'glove.6B.300d.txt'
-        
-        with open(fname,'rt') as fi:
+
+        with open(fname, 'rt', encoding='utf8') as fi:
             full_content = fi.read().strip().split('\n')
 
         data = {}
-        for i in tqdm(range(len(full_content)), total=len(full_content), desc = 'loading glove vocabs...'):
+        for i in tqdm(range(len(full_content)), total=len(full_content), desc='loading glove vocabs...'):
             i_word = full_content[i].split(' ')[0]
             if i_word not in vocab.keys():
                 continue
-            i_embeddings = [float(val) for val in full_content[i].split(' ')[1:]]
+            i_embeddings = [float(val)
+                            for val in full_content[i].split(' ')[1:]]
             data[i_word] = i_embeddings
 
     elif emb == 'fasttext':
         fname = 'wiki-news-300d-1M.vec'
 
-        fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+        fin = io.open(fname, 'r', encoding='utf-8',
+                      newline='\n', errors='ignore')
         n, d = map(int, fin.readline().split())
         data = {}
 
@@ -40,7 +42,7 @@ def get_word_vector(vocab, emb='glove'):
             if tokens[0] not in vocab.keys():
                 continue
             data[tokens[0]] = np.array(tokens[1:], dtype=np.float32)
-    
+
     else:
         raise Exception('emb not implemented')
 
@@ -56,6 +58,7 @@ def get_word_vector(vocab, emb='glove'):
     print('found', find, 'words in', emb)
     return torch.stack(w, dim=0)
 
+
 def data_preprocessing(text, remove_stopword=False):
 
     text = text.lower()
@@ -67,6 +70,7 @@ def data_preprocessing(text, remove_stopword=False):
         text = [word for word in text.split()]
     text = ' '.join(text)
     return text
+
 
 def create_vocab(corpus, vocab_size=30000):
 
@@ -89,6 +93,7 @@ def create_vocab(corpus, vocab_size=30000):
 
     return vocab_to_int
 
+
 class Textset(Dataset):
     def __init__(self, text, label, vocab, max_len):
         super().__init__()
@@ -103,11 +108,11 @@ class Textset(Dataset):
         self.x = new_text
         self.y = label
         self.vocab = vocab
-    
+
     def collate(self, batch):
-        
-        x = [torch.tensor(x) for x,y in batch]
-        y = [y for x,y in batch]
+
+        x = [torch.tensor(x) for x, y in batch]
+        y = [y for x, y in batch]
         x_tensor = pad_sequence(x, True)
         y = torch.tensor(y)
         return x_tensor, y
@@ -120,7 +125,7 @@ class Textset(Dataset):
             else:
                 r.append(self.vocab['<unk>'])
         return r
-    
+
     def __getitem__(self, idx):
         text = self.x[idx]
         word_id = self.convert2id(text)
