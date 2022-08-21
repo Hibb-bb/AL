@@ -66,6 +66,7 @@ If max_len is 1000, it means that we use the max length in the training data.
 | emotion          | 256    | 200     |
 | rotten_tomatoes  | 256    | 100     |
 | yelp_review_full | 256    | 400     |
+| imdb             | 128    | 1429    |
 
 ## Citation
 
