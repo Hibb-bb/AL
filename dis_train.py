@@ -7,6 +7,7 @@ from utils import *
 from distributed_model import LSTMModel
 from tqdm import tqdm
 import os
+import pandas as pd
 
 stop_words = set(stopwords.words('english'))
 
@@ -23,14 +24,18 @@ def get_args():
     parser.add_argument('--l1-dim', type=int,
                         help='lstm1 hidden dimension', default=128)
 
-    parser.add_argument('--vocab-size', type=int, help='vocab-size', default=30000)
-    parser.add_argument('--max-len', type=int, help='max input length', default=200)
-    parser.add_argument('--dataset', type=str, default='ag_news', choices=['ag_news', 'dbpedia_14', 'banking77', 'emotion', 'rotten_tomatoes','imdb', 'clinc_oos', 'yelp_review_full', 'sst2'])
+    parser.add_argument('--vocab-size', type=int,
+                        help='vocab-size', default=30000)
+    parser.add_argument('--max-len', type=int,
+                        help='max input length', default=200)
+    parser.add_argument('--dataset', type=str, default='ag_news', choices=[
+                        'ag_news', 'dbpedia_14', 'banking77', 'emotion', 'rotten_tomatoes', 'imdb', 'clinc_oos', 'yelp_review_full', 'sst2'])
     parser.add_argument('--word-vec', type=str, default='glove')
 
     # training param
     parser.add_argument('--lr', type=float, help='lr', default=0.001)
-    parser.add_argument('--batch-size', type=int, help='batch-size', default=64)
+    parser.add_argument('--batch-size', type=int,
+                        help='batch-size', default=64)
     parser.add_argument('--one-hot-label', type=bool,
                         help='if true then use one-hot vector as label input, else integer', default=True)
     parser.add_argument('--epoch', type=int, default=20)
@@ -43,9 +48,10 @@ def get_args():
     try:
         os.mkdir(args.save_dir)
     except:
-        pass 
+        pass
 
     return args
+
 
 def get_data(args):
 
@@ -87,12 +93,12 @@ def get_data(args):
         vocab = create_vocab(clean_train)
 
     else:
-        import pandas as pd
         from sklearn.model_selection import train_test_split
         class_num = 2
         df = pd.read_csv('./IMDB_Dataset.csv')
         df['cleaned_reviews'] = df['review'].apply(data_preprocessing, True)
-        corpus = [word for text in df['cleaned_reviews'] for word in text.split()]
+        corpus = [word for text in df['cleaned_reviews']
+                  for word in text.split()]
         text = [t for t in df['cleaned_reviews']]
         label = []
         for t in df['sentiment']:
@@ -101,14 +107,18 @@ def get_data(args):
             else:
                 label.append(0)
         vocab = create_vocab(corpus)
-        clean_train, clean_test, train_label, test_label = train_test_split(text, label, test_size=0.2)
+        clean_train, clean_test, train_label, test_label = train_test_split(
+            text, label, test_size=0.2)
 
     trainset = Textset(clean_train, train_label, vocab, args.max_len)
     testset = Textset(clean_test, test_label, vocab, args.max_len)
-    train_loader = DataLoader(trainset, batch_size=args.batch_size, collate_fn = trainset.collate, shuffle=True)
-    test_loader = DataLoader(testset, batch_size=args.batch_size, collate_fn = testset.collate)
+    train_loader = DataLoader(
+        trainset, batch_size=args.batch_size, collate_fn=trainset.collate, shuffle=True)
+    test_loader = DataLoader(
+        testset, batch_size=args.batch_size, collate_fn=testset.collate)
 
     return train_loader, test_loader, class_num, vocab
+
 
 def train(model, ld, epoch):
 
@@ -123,11 +133,14 @@ def train(model, ld, epoch):
         pred = model.inference(x)
         cor += (pred.argmax(-1) == y).sum().item()
         num += x.size(0)
-        
-        emb_ae, emb_as, l1_ae, l1_as, l2_ae, l2_as = round(tot_loss[0]/(step+1), 4), round(tot_loss[1]/(step+1), 4), round(tot_loss[2]/(step+1), 4), round(tot_loss[3]/(step+1), 4), round(tot_loss[4]/(step+1), 4), round(tot_loss[5]/(step+1), 4),
 
-        b.set_description(f'Train {epoch} | Acc {100*cor/num} ({cor}/{num}) | EMB {emb_ae} + {emb_as} | L1 {l1_ae} + {l1_as} | L2 {l2_ae} + {l2_as}')
+        emb_ae, emb_as, l1_ae, l1_as, l2_ae, l2_as = round(tot_loss[0]/(step+1), 4), round(tot_loss[1]/(step+1), 4), round(
+            tot_loss[2]/(step+1), 4), round(tot_loss[3]/(step+1), 4), round(tot_loss[4]/(step+1), 4), round(tot_loss[5]/(step+1), 4),
+
+        b.set_description(
+            f'Train {epoch} | Acc {100*cor/num} ({cor}/{num}) | EMB {emb_ae} + {emb_as} | L1 {l1_ae} + {l1_as} | L2 {l2_ae} + {l2_as}')
     # print('Train Epoch', epoch, 'Acc', 100*cor/num, 'Loss', tot_loss/len(ld))
+
 
 def test(model, ld, epoch, best_acc, ckpt):
 
@@ -148,15 +161,16 @@ def test(model, ld, epoch, best_acc, ckpt):
     print('Test Epoch', epoch, 'Acc', 100*cor/num)
     return best_acc
 
+
 def predicting_for_sst(args, model, vocab):
 
     test_data = load_dataset('sst2', split='test')
     test_text = [b['sentence'] for b in test_data]
     test_label = [b['label'] for b in test_data]
-    clean_test = [data_preprocessing(t, True) for t in test_text]
-    
+    clean_test = [data_preprocessing(t, False) for t in test_text]
+
     testset = Textset(clean_test, test_label, vocab, args.max_len)
-    test_loader = DataLoader(testset, batch_size=1, collate_fn = testset.collate)
+    test_loader = DataLoader(testset, batch_size=1, collate_fn=testset.collate)
 
     all_pred = []
     all_idx = []
@@ -165,10 +179,11 @@ def predicting_for_sst(args, model, vocab):
         pred = model.inference(x).argmax(1).squeeze(0)
         all_pred.append(pred.item())
         all_idx.append(i)
-    
-    pred_file = {'index':all_idx, 'prediction':all_pred}
+
+    pred_file = {'index': all_idx, 'prediction': all_pred}
     output = pd.DataFrame(pred_file)
     output.to_csv('SST-2.tsv', sep='\t', index=False)
+
 
 def main():
 
@@ -176,19 +191,22 @@ def main():
     args = get_args()
     train_loader, test_loader, class_num, vocab = get_data(args)
     word_vec = get_word_vector(vocab, args.word_vec)
-    model = LSTMModel(vocab_size=len(vocab), emb_dim=args.emb_dim, l1_dim=args.l1_dim, class_num=class_num, word_vec=word_vec, lr=args.lr)
+    model = LSTMModel(vocab_size=len(vocab), emb_dim=args.emb_dim,
+                      l1_dim=args.l1_dim, class_num=class_num, word_vec=word_vec, lr=args.lr)
     model = model.cuda()
 
     print('Start Training')
 
     for i in range(args.epoch):
         train(model, train_loader, i)
-        best_acc = test(model, test_loader, i, best_acc, args.save_dir+f'/{args.dataset}.pt')
+        best_acc = test(model, test_loader, i, best_acc,
+                        args.save_dir+f'/{args.dataset}.pt')
 
     print('Best acc', best_acc)
 
     if args.dataset == 'sst2':
         model.load_state_dict(torch.load(args.save_dir+f'/{args.dataset}.pt'))
         predicting_for_sst(args, model, vocab)
+
 
 main()
